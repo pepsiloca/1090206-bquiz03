@@ -193,15 +193,59 @@ $rows=$po->all(['sh'=>1]," order by `rank`");
       </script>
 
 
+
+<style>
+.mb{
+  width:48%;
+  height:160px;
+  margin:0.5%;
+  display: inline-block;
+}
+
+</style>
+
   <!---院線片-->  
     <div class="half">
       <h1>院線片清單</h1>
       <div class="rb tab" style="width:95%;">
-        <table>
-          <tbody>
-            <tr> </tr>
-          </tbody>
-        </table>
+    <?php
+    $db=new DB("movie");
+    $today=date("Y-m-d");
+    $ondate=date("Y-m-d",strtotime("-2 days"));
+
+    $total=$db->count(['sh'=>1], " && ondate >= '$ondate' && ondate <='$today'");
+    $div=4;
+    $now=(!empty($_GET['p']))?$_GET['p']:1;
+    $start=($now-1)*$div;
+    $rows=$db->all(['sh'=>1]," && ondate >= '$ondate' && ondate <='$today' order by rank limit $start,$div");
+    
+    foreach($rows as $row){
+
+    ?>
+
+      <div class="mb">
+      <table>
+        <tr>
+          <td rowspan="3"><a href="?do=intro&id=<?=$row['id'];?>"></a><img src="img/<?=$row['poster'];?>" style="width:80px;height:100px;"></a></td>
+          <td><?=$row['name'];?></td>
+        </tr>
+        <tr>
+          <td><?=$row['level'];?></td>
+        </tr>
+        <tr>
+          <td><?=$row['ondate'];?></td>
+        </tr>
+      </table>
+
+
+
+      </div>
+   
+
+      <?php
+      
+      }
+      ?>
         <div class="ct"> </div>
       </div>
     </div>
