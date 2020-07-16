@@ -37,6 +37,8 @@
 .po{
   width:100%;
   height:100%;
+  background: white;
+  color:black;
   position: absolute;
   display: none;
 }
@@ -62,7 +64,7 @@ $rows=$po->all(['sh'=>1]," order by `rank`");
         <?php
         
           foreach($rows as $k=>$row){
-            echo "<div class='po'>";
+            echo "<div class='po' data-ani='".$row['ani']."'>";
             echo "<img src='img/".$row['path']."'>";
             echo "<div class='ct'>".$row['name']."</div>";
             echo "</div>";
@@ -100,13 +102,76 @@ $rows=$po->all(['sh'=>1]," order by `rank`");
 
       <script>
         $(".po").eq(0).show(); //先顯示海報第一張
+
+        let auto=setInterval(slider, 3000);
+      
+
+          function slider(){
+            let dom=$(".po:visible");
+            // let ani=$(dom).attr("data-ani");
+            let ani=$(dom).data('ani');
+            let next=$(dom).next();
+            if(next.length<=0){
+              next=$(".po").eq(0)
+            }
+
+            // console.log(next.length)
+            switch(ani){
+          case 1:
+            //淡入淡出
+              $(dom).fadeOut(1000,function(){
+                $(next).fadeIn(1000);
+              });
+            break;
+          case 2:
+            //放大縮小
+              $(dom).hide(1000,function(){
+                $(next).show(1000);
+              });
+            break;
+          case 3:
+            //滑入滑出
+              $(dom).slideUp(1000,function(){
+                $(next).slideDown(1000);
+              });
+            break;
+          case 4:
+            //縮放
+            $(dom).animate({width:0,height:0,left:100,top:130},function(){
+                $(next).css({width:0,height:0,left:100,top:130})
+                $(next).show();
+                $(next).animate({width:200,height:200,left:0,top:0})
+                $(dom).hide()
+                $(dom).css({width:200,height:200,left:0,top:0})
+            })
+
+        }
+
+      }
+          $(".icon").on("click",function(){
+         
+            let index=$(".icon").index($(this))
+            $(".po").hide();
+            $(".po").eq(index).show();
+
+          })
+
+          $(".nav").hover(
+            function(){
+              clearInterval(auto)
+            },
+            function(){
+              auto=setInterval(slider, 3000);
+            }
+          )
+
         let p=0;
         let total=$(".icon").length;   //陣列的長度有多少 算有幾張圖
         
         function shift(direct){
 
           switch(direct){
-            case 'left':
+            case 'right':
               if(p < (total-4)){    //每次只顯示4張
                 p++;
                 $(".icon").animate({right:80*p})
@@ -114,7 +179,7 @@ $rows=$po->all(['sh'=>1]," order by `rank`");
               }
 
             break;
-            case 'right':
+            case 'left':
               if(p>0){
                 p--;
               $(".icon").animate({right:80*p})
