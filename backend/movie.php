@@ -29,7 +29,7 @@
 
 </style>
 
-<button>新增電影</button>
+<button onclick="location.href='?do=add_movie'">新增電影</button>
 <hr>
 <div class="list">
 <?php
@@ -46,7 +46,14 @@ foreach($rows as $k => $row){
             <span>片長:<?=$row['length'];?></span>
             <span>上映時間:<?=$row['ondate'];?></span>
         </div>
-        <div>功能按鈕</div>
+        <div>
+    <button onclick="sh('movie',<?=$row['id'];?>)"><?=($row['sh']==1)?"顯示":"隱藏";?></button>
+    <button class="shift" data-rank="<?=$row['id']."-".$prev;?>">往上</button>
+    <button class="shift" data-rank="<?=$row['id']."-".$next;?>">往下</button>
+    <button onclick="edit('movie',<?=$row['id'];?>)">編輯電影</button>
+    <button onclick="del('movie',<?=$row['id'];?>)">刪除電影</button>
+
+        </div>
         <div>劇情簡介:<?=$row['intro'];?></div>
     </div>
 </div>
@@ -56,3 +63,31 @@ foreach($rows as $k => $row){
 
 
 </div>
+
+<script>
+
+function sh(table,id){
+    $.post("api/sh.php",{table,id},function(){
+        location.reload();
+    }) 
+
+}    
+
+function del(table,id){
+    $post("api/del.php",{table,id}, function(){
+        location.reload();
+    })
+}
+
+
+
+
+$(".shift").on("click",function(){
+    let id=$(this).data("rank").split("-");
+    $.post("api/rank.php",{id,"table":"movie"},function(){
+        location.reload();
+    })
+})
+
+
+</script>
