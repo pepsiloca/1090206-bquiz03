@@ -2,7 +2,7 @@
 
 include_once "../base.php";
 
-$movie_id=$_Get['id'];
+$movie_id=$_GET['id'];
 $db=new DB("movie");
 $movie=$db->find($movie_id);
 
@@ -17,3 +17,6 @@ for($i=0;$i<3;$i++){
 }
 
 ?>
+
+
+
