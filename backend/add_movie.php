@@ -18,6 +18,7 @@
 
 </style>
 <h1 class="ct">新增院線片</h1>
+<form action="api/add_movie.php" moth></form>
 <div class="a">
     <div>影片資料</div>
     <div>
