@@ -33,15 +33,17 @@ $ord=$db->find(['no=>$sno']);
             echo floor($s/5)+1;
             echo "排";
             echo $s%5+1;
+            echo "號";
+            echo "<br>";
 
         }
-        echo $ord['seat'];
+        echo "共".$ord['qt']."張電影票";
         ?>
         </td>
     </tr>
     <tr>
         <td colspan="2">
-        <button  onclick="location.href='index.php'"></button>
+        <button  onclick="location.href='index.php'">確認</button>
         </td>
     </tr>
 

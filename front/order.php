@@ -48,12 +48,14 @@
     display:flex;
     flex-wrap:wrap;
     margin:auto;
+    padding-top:19px;
 }
 
 .room > div{
     width:64px;
     height:80px;
     position:relative;
+    text-align:center;
 }
 
 .null{
@@ -70,13 +72,21 @@
     bottom:5px;
 }
 
-.border{
-    width:340px;
-    
-
+.board{
+    width:540px;
+    height:370px;
+    margin:auto;
+    background:url("icon/03D04.png") no-repeat center;
 }
 
+.info-block{
+    background: #eee;
+    padding:10px 0 10px 300px;
+}
 
+.info p{
+    margin:5px;
+}
 
 </style>
 
@@ -136,20 +146,25 @@ function booking(){
                     $(this).prop("checked",false)
                 }else{
                     seat.push($(this).val())
+                    $(this).parent().removeClass("null")
+                    $(this).parent().addClass("booked")
                 }
                 break;
                 case false:
                 ticket--;
                 seat.splice(seat.indexOf($(this).val()),1)
+                $(this).parent().removeClass("booked")
+                $(this).parent().addClass("null")
                 break;
             }
             console.log(seat)
-        $("#ticket").html(ticket);    
+        $("#ticket").html(ticket);  
+        })
+
         $("#send").on("click",function(){
             $.post("api/order.php",{movie,date,session,seat},function(ordno){
                 location.href="?do=result&ord="+ordno;
             })
-        })
         })
     })
 
