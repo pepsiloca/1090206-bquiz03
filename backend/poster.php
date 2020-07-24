@@ -34,9 +34,16 @@ h4{
 
 <?php
 $db=new DB("poster");
+
+//要以排序過後的方式來取出全部的資料
 $rows=$db->all([]," order by `rank`");
+
 foreach($rows as $k => $row){
+
+    //判斷該筆資料的顯示狀態
     $isChecked=($row['sh']==1)?"checked":"";
+
+    //找出排序後的上一筆和下一筆的資料id
     $prev=($k!=0)?$rows[$k-1]['id']:$row['id'];
     $next=($k!=(count($rows)-1))?$rows[$k+1]['id']:$row['id'];
 
@@ -48,6 +55,7 @@ foreach($rows as $k => $row){
     <!--
     上一筆$k-1 + 是否第一筆 $k == 0
     下一筆$k+1 + 是否最後一筆 $k == count($rows)-1
+    將計算出來的上下筆id寫入到data-rank屬性中
     -->
     <button type="button" data-rank="<?=$row['id']."-".$prev;?>">往上</button>
     <button type="button" data-rank="<?=$row['id']."-".$next;?>">往下</button>
@@ -59,7 +67,7 @@ foreach($rows as $k => $row){
         <option value="1" <?=($row['ani']==1)?"selected":"";?>>淡入淡出</option>
         <option value="2" <?=($row['ani']==2)?"selected":"";?>>放大縮小</option>
         <option value="3" <?=($row['ani']==3)?"selected":"";?>>滑入滑出</option>
-        <option value="4" <?=($row['ani']==3)?"selected":"";?>>縮放</option>
+        <option value="4" <?=($row['ani']==4)?"selected":"";?>>縮放</option>
     </select>
     <input type="hidden" name="id[]" value="<?=$row['id'];?>">
 </div>
@@ -95,16 +103,21 @@ foreach($rows as $k => $row){
 </form>
 </div>
 
-
 <script>
-
+//使用jquery來對button的點擊做處理
 $("button").on("click",function(){
+
+    //取得data屬性的值，並拆成一個id陣列
     let id=$(this).data("rank").split("-");
+
+    //將id陣列連同要修改的資料表名稱一起用ajax的方式一直傳到後台
     $.post("api/rank.php",{id,"table":"poster"},function(){
+
+        //後台api處理完畢後重新載入一次頁面
         location.reload();
     })
 })
 
 
-</script>
 
+</script>

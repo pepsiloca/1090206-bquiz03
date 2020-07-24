@@ -1,4 +1,4 @@
-﻿﻿<?php
+﻿<?php
 $db=new DB("movie");
 $row=$db->find($_GET['id']);
 ?>

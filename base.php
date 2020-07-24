@@ -44,7 +44,7 @@ class DB
         }
 
         //echo $sql;
-        return $this->pdo->query($sql)->fetchAll(); 
+        return $this->pdo->query($sql)->fetchAll();
     }
 
     public function find($arg)
@@ -136,6 +136,7 @@ class DB
 
     public function q($sql)
     {
+        
         return $this->pdo->query($sql)->fetchAll();
     }
 
@@ -145,3 +146,4 @@ function to($url)
 {
     header("location:" . $url);
 }
+
